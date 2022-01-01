@@ -204,3 +204,6 @@ This  is  because  React  doesn’t  actually  re-create  the  entire  DOM  stru
 > - Updates are batched to avoid expensive repaints and layout reflows
 > - Application state is far less likely to get out of sync with the page
 > - Replaying application state changes effectively replays user interface changes
+
+
+Now you are ready to [create your catstagram](./part2.md)

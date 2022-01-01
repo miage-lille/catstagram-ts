@@ -53,8 +53,8 @@ Fake data in JSON format :
 ```
 
 Your tasks:
-- Update the state type to store counter value and a list of pictures
-- Update the reducer to update the list of pictures while updating the counter value
+- Update the state type to store counter value and a array of pictures
+- Update the reducer to update the array of pictures while updating the counter value
 - Update the view to display the pictures
 
 
@@ -250,10 +250,10 @@ _At this step we will put all the plumbing but not yet parse the response_
 Yours tasks:
 
 - Update the state type
->💡 Tip: At the previous step the state would have been *an int counter AND a picture list* ; at this step the *picture list* should be modify for a type that defines something like a *loading OR success of a picture list OR failure of a string* (the message error seems to be a perfect string)
+>💡 Tip: At the previous step the state would have been *an int counter AND a picture array* ; at this step the *picture array* should be modify for a type that defines something like a *loading OR success of a picture array OR failure of a string* (the message error seems to be a perfect string)
 
 - Update the initial value
->💡 Tip: a success of an empty list seems a good idea
+>💡 Tip: a success of an empty array seems a good idea
 
 - Update the msg type
 >💡 Tip: you will need additional values that represent the 3 new events: *call the service OR service call succeeded or service call failed*
@@ -271,13 +271,15 @@ We will use the [json](https://developer.mozilla.org/en-US/docs/Web/API/Response
 
 First we should take a look at a [sample of the body response from pixabay](../sample-api-response.json).
 
-Our objective is to gets a `picture list` from the `hits`. We can proceed with 2 steps:
+Our objective is to gets a pictures array from the `hits`. We can proceed with 2 steps:
+
 a. Parse the string to a JSON with `json` method
+
 b. Extract the `hits` array and create an array of Picture.
 
 > 💡 Tip: returning a `Promise` to chain it with `fetch` seems to be good
 
-> ℹ️ Don't forget to update your reducer to map with your type of `Pictures`. Remember, it must be *loading OR success of a picture list OR failure of a string*.
+> ℹ️ Don't forget to update your reducer to map with your type of `Pictures`. Remember, it must be *loading OR success of a picture array OR failure of a string*.
 
 ## Exercice 6: Finalize the app
 
