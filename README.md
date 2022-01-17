@@ -4,7 +4,7 @@ The purpose of this training is to practice The Elm Architecture (TEA) with the 
 
 > 📌 This training is incremental, each exercise is a step to the solution. You only need to push the result of the last exercice (or the latest you succeed to do). It will be part of your evaluation.
 
-For this training we use [Vitejs](https://vitejs.dev/) to bundle our app. It requires less configuration than [Webpack](https://webpack.js.org/) and it's pretty simple to setup. But it's also new so don't use it in production 😉.
+For this training we use [Vitejs](https://vitejs.dev/) to bundle our app. It provides a faster and leaner development experience for modern web projects
 
 To run the project:
 - `npm install` (or `npm i`)
