@@ -2,12 +2,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testMatch: ["**/specs/*.+(ts|tsx|js)"],
+  testMatch: ['**/specs/*.spec.ts'],
   setupFilesAfterEnv: ['fp-ts-jest-matchers'],
-  globals: {
-    'ts-jest': {
-      tsconfig : 'tsconfig.json',
-      useESM: true
-    }
-  }
 };
