@@ -1,20 +1,7 @@
 import * as fc from 'fast-check';
 import { getCmd, getModel, ActionCmd, RunCmd } from 'redux-loop';
-import reducer, {
-  counterSelector,
-  getSelectedPicture,
-  picturesSelector,
-  loading,
-  failure,
-  success,
-} from '../src/reducer';
-import {
-  fetchCatsCommit,
-  fetchCatsRollback,
-  FetchCatsCommit,
-  FetchCatsRequest,
-  FetchCatsRollback,
-} from '../src/actions';
+import reducer, { counterSelector, getSelectedPicture, picturesSelector } from '../src/reducer';
+import { fetchCatsCommit, fetchCatsRollback } from '../src/actions';
 import 'fp-ts-jest-matchers';
 import {
   getStateWithCounterEquals3,
@@ -24,6 +11,8 @@ import {
   getError,
   getFetchCatsRequestAction,
 } from './generators';
+import { loading, success, failure } from '../src/api';
+import { FetchCatsRequest, FetchCatsCommit, FetchCatsRollback } from '../src/types/actions.type';
 
 test('given state with counter equals to 3 and DECREMENT action then counter value must not change', () => {
   fc.assert(

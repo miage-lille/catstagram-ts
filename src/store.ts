@@ -1,7 +1,8 @@
-import { createStore, compose, applyMiddleware } from 'redux';
-import reducer, { State, Actions } from './reducer';
+import { legacy_createStore as createStore, compose, applyMiddleware } from 'redux';
+import reducer, { State } from './reducer';
 import { install, LoopReducer, StoreCreator } from 'redux-loop';
 import { createLogger } from 'redux-logger';
+import { Actions } from './types/actions.type';
 
 const enhancedStore = createStore as StoreCreator;
 

@@ -1,14 +1,15 @@
 import fc from 'fast-check';
-import { FetchCatsRequest } from '../src/actions';
 import * as O from 'fp-ts/lib/Option';
-import { Picture, Loading, Success, Failure } from '../src/reducer';
+import { FetchCatsRequest } from '../src/types/actions.type';
+import { Loading, Success, Failure } from '../src/types/api.type';
+import { Picture } from '../src/types/picture.type';
 
 const getPictureArb = (): fc.Arbitrary<Picture> =>
   fc.record({
-    previewURL: fc.webUrl(),
-    webformatURL: fc.webUrl(),
-    user: fc.string(),
-    largeImageURL: fc.webUrl(),
+    previewFormat: fc.webUrl(),
+    webFormat: fc.webUrl(),
+    author: fc.string(),
+    largeFormat: fc.webUrl(),
   });
 
 const getError = (): fc.Arbitrary<Error> => fc.string().map(Error);
