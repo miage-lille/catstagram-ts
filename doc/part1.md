@@ -22,11 +22,24 @@ On the top-level, we define a state which represents our model in our applicatio
 
 Then, this state can be updated by function called reducer, which take the current value of the state and an action and return a new state updated with the action intention.
 
-An action is a plain object which represents what we want to update in our global state.
+An action is a plain object with a `type` property (mandatory by Redux) which represents what we want to update in our global state.
 
 Once the state is updated by the reducer, views affected by the update can be re-rendered.
 
 An action can be dispatched by an user action or in response of another action.
+
+To get a piece of our state we need to define selectors. Selectors are functions that takes state and return piece of it.
+
+
+ 🧪 Example 🧪 :
+```ts
+type State = {
+  todos: string[]
+}
+
+// A selector to get all todos in state
+const getAllTodos = (state: State): string[] => state.todos;
+```
 
 
 To sum up :
@@ -34,6 +47,7 @@ To sum up :
 - *State* : application data model (**Model** in TEA)
 - *Reducer* : pure function used to update the state (**Update in TEA**)
 - *View* : user interface (**View in TEA**)
+- *Selectors* : pure function to get a piece of state
 
 The Elm Architecture :
 
@@ -45,36 +59,40 @@ The Redux "one way dataflow" :
 
 ## Representing our application state
 
-First point is to define the initial state of our application. In TEA we store the state in a `State` entity. For a counter its type will be a `number` (in Javascript world) and inital value `0`.
+First point is to define the initial state of our application. We store the state in a `State` entity. For a counter its type will be a `number` (in Javascript world) and inital value `0`.
 
 
 ```ts
-type State = {
+export type State = {
   counter: number,
 }
 
-const defaultState: State = {
+export const defaultState: State = {
   counter: 0
 }
 ```
 
-## Handling events with messages and updates
+🧑‍💻 ➡️ Update `src/reducer.ts` with this piece of code. ⬅️ 🧑‍💻
 
+## Handling events with messages and updates
 
 Now we can represent the counter, we would like to provide buttons `-` and `+` to decrement or increment our state. We need to write an `update` function that translate _messages_ into the desired `state`. The  message  should  describe _what happened_.
 
-In Redux world, the function `update` is called a `reducer` and the messages that carry our data is called an `action`.
+> ℹ️ In Redux world, the function `update` is called a `reducer` and the messages that carry our data is called an `action`.
 
-A reducer is simply a function that take the current `state` and an `action` as arguments and return a new `state`. So a reducer is `(state, action) => newState`.
-State  is updated according to the action in parameter.
+A reducer is simply a function that take the current `state` and an `action` as arguments and return a new `state`. So a reducer type can be sum up by `(state, action) => newState`.
+State is updated according to the action in parameter.
 
 
-Let's go to write our first reducer ! 🙂
-First, we define our new types ...
+Let's go to write our first reducer ! 🙂 💪
+First, we define our new types, with the corresponding type constructors called ***action creators*** in Redux world...
 
 ```ts
 type Increment = { type: 'INCREMENT' };
 type Decrement = { type: 'DECREMENT' };
+
+const increment = (): Increment => { type: 'INCREMENT' };
+const decrement = (): Decrement => { type: 'DECREMENT' };
 
 type Actions =
   | Increment
@@ -84,7 +102,7 @@ type Actions =
 ... and then, write the reducer
 
 ```ts
-const myReducer = (state: State | undefined, action: Actions) : State => {
+const reducer = (state: State | undefined, action: Actions) : State => {
   if (!state) return defaultState; // mandatory by redux
   switch (action.type) {
     case 'INCREMENT':
@@ -94,6 +112,9 @@ const myReducer = (state: State | undefined, action: Actions) : State => {
   }
 }
 ```
+
+🧑‍💻 ➡️ Update `src/reducer.ts` with this piece of code. [actions type](../src/types/actions.type.ts) and [actions creator](../src/actions.ts) are already written. ⬅️ 🧑‍💻
+
 
 > ℹ️ A Redux state is undefined when your app is starting. To build your initial state, Redux launch an action to initialize it. That's why in reducer our state is `State | undefined`.
 
@@ -122,7 +143,11 @@ This HTML produce the relative DOM:
 
 ![](../dom-counter.png)
 
-With React, we usually use a syntax called JSX (_Javascript Syntax Expression) which provides syntactic sugar over our component code. This syntax is similar to XML. This syntactic sugar corresponds to functions for creating DOM elements. For example, this expression ...
+With React, we usually use a syntax called JSX (_Javascript Syntax Expression) which provides syntactic sugar over our component code. This syntax is similar to XML. This syntactic sugar corresponds to functions for creating DOM elements.
+
+🧪 Example 🧪
+
+This expression ...
 
 ```ts
 <div>Hello {this.props.world}</div>
@@ -134,12 +159,12 @@ With React, we usually use a syntax called JSX (_Javascript Syntax Expression) w
 React.createElement('div', null, `Hello ${this.props.world}`)
 ```
 
-But it's for your culture, **only use JSX when writing components in React !!**
+⚠️ But it's for your culture, **only use JSX when writing components in React !!**
 
 ### The counter view
 
 For this training we will use [styled-components](https://styled-components.com/) to quickly add theming. It provides a way to define components styled with CSS.
-Let's go to define our style !
+Let's go to define our style ! 🚀
 
 
 ```ts
@@ -162,6 +187,9 @@ const Button = styled.button`
   }
   &:focus {
     background-color: #5e00a3;
+  }
+  &:disabled {
+    background-color: #808080;
   }
 `;
 
@@ -188,12 +216,11 @@ const Counter = () => {
 };
 ```
 
+🧑‍💻 ➡️ Update [counter component](../src/components/counter.tsx) with this piece of code. Styles are already provided ⬅️ 🧑‍💻
+
 To keep the app simple, we use Redux hooks `useSelector` and `useDispatch` :
-- `useSelector` is used to get a value from Redux state
-- `useDispatch` provides a way to dispatch an action
-
-More informations [here](https://react-redux.js.org/api/hooks).
-
+- [`useSelector`](https://react-redux.js.org/api/hooks#useselector) is used to get a value from Redux state
+- [`useDispatch`](https://react-redux.js.org/api/hooks#usedispatch) provides a way to dispatch an action
 
 
 
@@ -205,5 +232,14 @@ This  is  because  React  doesn’t  actually  re-create  the  entire  DOM  stru
 > - Application state is far less likely to get out of sync with the page
 > - Replaying application state changes effectively replays user interface changes
 
+
+## 🧑‍💻 Exercice 1 🧑‍💻
+
+We only want the implement the rule: **Counter value must be greater than or equal to 3**.
+- update `counterSelector` to get counter value from state
+- modify `reducer` to avoid counter below 3
+- modify `counter component` to disable the button `-` when counter value is 3
+
+> ℹ️ [disabled](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-disabled) attribute on button can help you ...
 
 Now you are ready to [create your catstagram](./part2.md)

@@ -32,6 +32,8 @@ const DisplayCounter = styled.span`
   color: darkgrey;
 `;
 
-const Counter = () => null;
+const Counter = () => {
+  return null;
+};
 
 export default Counter;

@@ -25,13 +25,13 @@ const getFetchCatsRequestAction = (counter: number): fc.Arbitrary<FetchCatsReque
 const getSomeFromPicture = (picture: fc.Arbitrary<Picture>): fc.Arbitrary<O.Option<Picture>> => picture.map(O.some);
 const getNone = (): fc.Arbitrary<O.Option<Picture>> => fc.constant(O.none);
 
-const getLoadingArb = (): fc.Arbitrary<Loading> => fc.record({ kind: fc.constant('Loading') });
+const getLoadingArb = (): fc.Arbitrary<Loading> => fc.record({ kind: fc.constant('LOADING') });
 const getSuccessArb = (): fc.Arbitrary<Success> =>
-  fc.record({ kind: fc.constant('Success'), pictures: fc.array(getPictureArb()) });
+  fc.record({ kind: fc.constant('SUCCESS'), pictures: fc.array(getPictureArb()) });
 const getFailureArb = (): fc.Arbitrary<Failure> =>
-  fc.record({ kind: fc.constant('Failure'), error: fc.constant('error') });
+  fc.record({ kind: fc.constant('FAILURE'), error: fc.constant('error') });
 
-const getPictures = () => fc.oneof(getLoadingArb(), getSuccessArb(), getFailureArb());
+const getPictures = (): fc.Arbitrary<any> => fc.oneof(getLoadingArb(), getSuccessArb(), getFailureArb());
 
 const getState = () =>
   fc.record({
@@ -44,7 +44,7 @@ const getStateWithCounterEquals3 = () =>
   fc.record({
     counter: fc.constant(3),
     pictures: getPictures(),
-    pictureSelected: fc.option(fc.nat()),
+    pictureSelected: fc.oneof(getSomeFromPicture(getPictureArb()), getNone()),
   });
 
 export {

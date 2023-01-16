@@ -1,4 +1,4 @@
-import { LoopReducer, liftState } from 'redux-loop';
+import { Loop, liftState } from 'redux-loop';
 import { compose } from 'redux';
 import { Actions } from './types/actions.type';
 
@@ -6,7 +6,7 @@ export type State = unknown; // TODO : Update this type !
 
 export const defaultState = {}; // TODO : Update this value !
 
-export const reducer = (state: State | undefined, action: Actions): State | LoopReducer<State, Actions> => {
+export const reducer = (state: State | undefined, action: Actions): State | Loop<State> => {
   if (!state) return defaultState; // mandatory by redux
   switch (action.type) {
     case 'INCREMENT':

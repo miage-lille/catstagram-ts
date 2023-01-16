@@ -8,7 +8,7 @@ export type CloseModal = { type: 'CLOSE_MODAL' };
 
 export type FetchCatsRequest = { type: 'FETCH_CATS_REQUEST'; method: 'GET'; path: string };
 export type FetchCatsCommit = { type: 'FETCH_CATS_COMMIT'; payload: unknown }; // TODO : Update this type !
-export type FetchCatsRollback = { type: 'FETCH_CATS_ROLLBACK'; error: Error }; // TODO : Update this type !
+export type FetchCatsRollback = { type: 'FETCH_CATS_ROLLBACK'; error: Error };
 
 export type Actions =
   | Increment
