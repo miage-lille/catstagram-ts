@@ -1,74 +1,18 @@
 import * as fc from 'fast-check';
 import { getCmd, getModel, ActionCmd, RunCmd } from 'redux-loop';
-import reducer, {
-  counterSelector,
-  defaultState,
-  getSelectedPicture,
-  picturesSelector,
-  loading,
-  failure,
-  success,
-  Picture,
-  Success,
-  Loading,
-  Failure,
-} from '../src/reducer';
-import {
-  fetchCatsCommit,
-  fetchCatsRollback,
-  FetchCatsCommit,
-  FetchCatsRequest,
-  FetchCatsRollback,
-} from '../src/actions';
+import reducer, { counterSelector, getSelectedPicture, picturesSelector } from '../src/reducer';
+import { fetchCatsCommit, fetchCatsRollback } from '../src/actions';
 import 'fp-ts-jest-matchers';
-import * as O from 'fp-ts/lib/Option';
-
-const getPictureArb = (): fc.Arbitrary<Picture> =>
-  fc.record({
-    previewURL: fc.webUrl(),
-    webformatURL: fc.webUrl(),
-    user: fc.string(),
-    largeImageURL: fc.webUrl(),
-  });
-
-const getError = (): fc.Arbitrary<Error> => fc.string().map(Error);
-const getPayload = (): fc.Arbitrary<Picture[]> => fc.array(getPictureArb());
-
-const getFetchCatsRequestAction = (counter: number): fc.Arbitrary<FetchCatsRequest> =>
-  fc.record({
-    type: fc.constant('FETCH_CATS_REQUEST'),
-    path: fc.constant(`https://pixabay.com/api/?key=24523143-8a90135b40ac6e775ba6758cb&per_page=${counter}&q=cat`),
-    method: fc.constant('GET'),
-  });
-
-const getSomeFromPicture = (picture: fc.Arbitrary<Picture>): fc.Arbitrary<O.Option<Picture>> => picture.map(O.some);
-const getNone = (): fc.Arbitrary<O.Option<Picture>> => fc.constant(O.none);
-
-const getLoadingArb = (): fc.Arbitrary<Loading> => fc.record({ kind: fc.constant('Loading') });
-const getSuccessArb = (): fc.Arbitrary<Success> =>
-  fc.record({ kind: fc.constant('Success'), pictures: fc.array(getPictureArb()) });
-const getFailureArb = (): fc.Arbitrary<Failure> =>
-  fc.record({ kind: fc.constant('Failure'), error: fc.constant('error') });
-
-const getPictures = () => fc.oneof(getLoadingArb(), getSuccessArb(), getFailureArb());
-
-const getState = () =>
-  fc.record({
-    counter: fc.integer(),
-    pictures: getPictures(),
-    pictureSelected: fc.oneof(getSomeFromPicture(getPictureArb()), getNone()),
-  });
-
-const getStateWithCounterEquals3 = () =>
-  fc.record({
-    counter: fc.constant(3),
-    pictures: getPictures(),
-    pictureSelected: fc.option(fc.nat()),
-  });
-
-// ###########################################################
-// ######################## TESTS ############################
-// ###########################################################
+import {
+  getStateWithCounterEquals3,
+  getState,
+  getPictureArb,
+  getPayload,
+  getError,
+  getFetchCatsRequestAction,
+} from './generators';
+import { loading, success, failure } from '../src/api';
+import { FetchCatsRequest, FetchCatsCommit, FetchCatsRollback } from '../src/types/actions.type';
 
 test('given state with counter equals to 3 and DECREMENT action then counter value must not change', () => {
   fc.assert(
